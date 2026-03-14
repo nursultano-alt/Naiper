@@ -302,7 +302,7 @@
             budgetLabel.textContent = 'из ' + formatMoney(budget);
         } else {
             budgetRingFill.style.strokeDashoffset = circumference;
-            budgetLabel.textContent = filtered.length > 0 ? filtered.length + ' расход' + pluralize(filtered.length) : '';
+            budgetLabel.textContent = filtered.length > 0 ? filtered.length + ' ' + pluralForm(filtered.length, 'расход', 'расхода', 'расходов') : '';
         }
 
         // Category tags
@@ -316,13 +316,13 @@
         categoryBreakdown.innerHTML = html;
     }
 
-    function pluralize(count) {
+    function pluralForm(count, one, few, many) {
         var mod = count % 10;
         var mod100 = count % 100;
-        if (mod100 >= 11 && mod100 <= 14) return 'ов';
-        if (mod === 1) return '';
-        if (mod >= 2 && mod <= 4) return 'а';
-        return 'ов';
+        if (mod100 >= 11 && mod100 <= 14) return many;
+        if (mod === 1) return one;
+        if (mod >= 2 && mod <= 4) return few;
+        return many;
     }
 
     // ===== RENDER EXPENSE LIST =====
@@ -336,7 +336,7 @@
         }
 
         emptyMsg.style.display = 'none';
-        expenseCount.textContent = expenses.length + ' запис' + (expenses.length === 1 ? 'ь' : expenses.length < 5 ? 'и' : 'ей');
+        expenseCount.textContent = expenses.length + ' ' + pluralForm(expenses.length, 'запись', 'записи', 'записей');
 
         var sorted = expenses.slice().sort(function (a, b) {
             return new Date(b.date) - new Date(a.date);
