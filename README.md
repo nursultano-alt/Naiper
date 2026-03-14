@@ -1,78 +1,73 @@
-# Naiper — Napier's Bones Calculator
+# AX — Учёт расходов
 
-An interactive web-based implementation of [Napier's Bones](https://en.wikipedia.org/wiki/Napier%27s_bones) — the 17th-century multiplication device invented by **John Napier**.
+Быстрое и удобное приложение для отслеживания ежедневных расходов.  
+Просто вводи сумму — **AX** сам определит категорию, посчитает статистику и сохранит историю.
 
-## Features
+## Возможности
 
-- 🦴 Interactive Napier's Bones grid with diagonal visualization
-- ➗ Step-by-step working showing diagonal sums and carry propagation
-- 🕑 Persistent calculation history (stored in `localStorage`)
-- 📱 Responsive design — works on desktop and mobile
+- ⚡ **Быстрый ввод** — поле суммы всегда в фокусе, нажмите Enter для добавления
+- 🤖 **Автокатегоризация** — пишешь «кофе», «такси», «продукты» — категория определяется автоматически (RU + EN)
+- 📊 **Сводка** — карточки «Сегодня / Неделя / Месяц»
+- 📋 **История** — все траты, сгруппированные по дням, с фильтром по периоду и категории
+- 📈 **Статистика** — линейный график за 7 дней + распределение по категориям
+- 💰 **Бюджет** — задай месячный лимит и следи за его расходованием
+- 📤 **Экспорт в CSV** — одна кнопка, готовый файл для Excel/Google Sheets
+- 🌙 **Тёмная тема** — приятно использовать в любое время суток
+- 💾 **Без сервера** — все данные хранятся в `localStorage` браузера
 
-## Quick Start
+## Быстрый старт в VS Code
 
-### Open directly in a browser
+1. Установи расширение **Live Server**:  
+   `Ctrl+Shift+X` → поиск **"Live Server"** → Install
 
-```bash
-# Just open the file — no build step needed
-open index.html          # macOS
-xdg-open index.html      # Linux
-start index.html         # Windows
-```
+2. Открой папку проекта:  
+   `File → Open Folder…` → выбери папку `Naiper`
 
-### Use Live Server in VS Code (recommended)
+3. Правой кнопкой по `index.html` → **"Open with Live Server"**  
+   *(или кнопка **Go Live** внизу строки состояния)*
 
-1. Install the **Live Server** extension:  
-   `Ctrl+Shift+X` → search **"Live Server"** → Install
-2. Open the project folder in VS Code (`File → Open Folder…`)
-3. Right-click `index.html` → **"Open with Live Server"**  
-   (or click **Go Live** in the bottom status bar)
-4. The app opens at `http://127.0.0.1:5500`
+4. Приложение откроется по адресу `http://127.0.0.1:5500`
 
-> Any file you save is hot-reloaded automatically.
+> Любое изменение файлов автоматически обновляет страницу.
 
-## How to Use
-
-1. Enter a **multiplicand** (any positive integer, e.g. `425`)
-2. Enter a **multiplier** (1 – 9999, e.g. `6`)
-3. Click **Calculate** (or press Enter)
-
-The app will display:
-- The **Napier's Bones grid** with the matching row highlighted
-- A **step-by-step diagonal addition** breakdown
-- The final **result**
-- An entry in the **History** panel
-
-## Project Structure
+## Структура проекта
 
 ```
 Naiper/
-├── index.html   # App shell & markup
-├── style.css    # Styles (CSS variables, responsive)
-├── script.js    # Calculator logic & DOM rendering
-└── README.md    # This file
+├── index.html   # Разметка приложения
+├── style.css    # Стили (тёмная тема, переменные CSS)
+├── app.js       # Логика: CRUD, категоризация, графики, экспорт
+└── README.md    # Документация
 ```
 
-## How Napier's Bones Work
+## Категории (автоопределение)
 
-Each "bone" (rod) carries the multiples of a single digit split across a diagonal:
+| Иконка | Категория       | Ключевые слова (примеры)                   |
+|--------|-----------------|--------------------------------------------|
+| 🍔     | Еда             | кофе, ресторан, продукты, доставка, pizza  |
+| 🚗     | Транспорт       | такси, uber, автобус, метро, бензин        |
+| 🛒     | Покупки         | магазин, одежда, kaspi, ozon, wildberries  |
+| 💊     | Здоровье        | аптека, врач, лекарства, фитнес            |
+| 🎮     | Развлечения     | кино, концерт, бар, боулинг, игра          |
+| 🏠     | Жильё           | аренда, ремонт, мебель, отель              |
+| 💡     | Коммунальные    | электричество, интернет, газ, квитанция    |
+| 📱     | Подписки        | netflix, spotify, icloud, telegram premium |
+| 📚     | Образование     | курс, книга, udemy, репетитор              |
+| ��     | Другое          | всё остальное                              |
 
-```
-Digit 6 — rod:
-┌────┐
-│  6 │  ← digit header
-├────┤
-│  /6│  row 1  → 6
-│1/2 │  row 2  → 12
-│1/8 │  row 3  → 18
-│ …  │
-└────┘
-```
+## Горячие клавиши
 
-To multiply `6 × 3`, you lay out the rod for 6 and read row 3 (= 18).  
-For a multi-digit multiplicand like `425 × 6`, you lay out rods 4, 2, 5 and
-add the diagonal columns of row 6 to obtain the product.
+| Клавиша        | Действие                          |
+|----------------|-----------------------------------|
+| `Enter`        | Добавить трату (из поля суммы)    |
+| `Esc`          | Закрыть модальное окно            |
+| `Tab`          | Перейти к следующему полю         |
 
-## License
+## Данные
+
+Все данные хранятся **локально в браузере** (`localStorage`).  
+Используй кнопку **"Экспорт в CSV"** в настройках ⚙ для резервной копии.
+
+## Лицензия
 
 MIT
