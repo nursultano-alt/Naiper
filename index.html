@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Naiper – Napier's Bones Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Naiper</h1>
+    <p class="subtitle">Napier's Bones — interactive multiplication calculator</p>
+  </header>
+
+  <main>
+    <!-- Input section -->
+    <section class="input-section">
+      <div class="input-group">
+        <label for="multiplicand">Multiplicand</label>
+        <input
+          type="number"
+          id="multiplicand"
+          min="1"
+          max="9999999999"
+          placeholder="e.g. 425"
+          aria-label="Multiplicand"
+        />
+      </div>
+      <span class="operator">×</span>
+      <div class="input-group">
+        <label for="multiplier">Multiplier</label>
+        <input
+          type="number"
+          id="multiplier"
+          min="1"
+          max="9999"
+          placeholder="e.g. 6"
+          aria-label="Multiplier"
+        />
+      </div>
+      <button id="calculate-btn" aria-label="Calculate">Calculate</button>
+    </section>
+
+    <!-- Error message -->
+    <p id="error-msg" class="error hidden" role="alert"></p>
+
+    <!-- Bones display -->
+    <section id="bones-section" class="bones-section hidden" aria-label="Napier's Bones">
+      <h2>Napier's Bones</h2>
+      <div id="bones-container" class="bones-container"></div>
+    </section>
+
+    <!-- Step-by-step working -->
+    <section id="working-section" class="working-section hidden">
+      <h2>Step-by-step working</h2>
+      <div id="working-container"></div>
+      <div class="result-box">
+        <span id="multiplicand-display"></span>
+        <span class="operator">×</span>
+        <span id="multiplier-display"></span>
+        <span class="operator">=</span>
+        <span id="result-display" class="result-value"></span>
+      </div>
+    </section>
+
+    <!-- History -->
+    <section id="history-section" class="history-section hidden">
+      <div class="history-header">
+        <h2>History</h2>
+        <button id="clear-history-btn" aria-label="Clear history">Clear</button>
+      </div>
+      <ul id="history-list"></ul>
+    </section>
+  </main>
+
+  <!-- Info modal trigger -->
+  <button id="info-btn" class="info-btn" aria-label="About Napier's Bones">?</button>
+
+  <!-- Info modal -->
+  <div id="info-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-content">
+      <button class="modal-close" id="modal-close-btn" aria-label="Close">✕</button>
+      <h2 id="modal-title">About Napier's Bones</h2>
+      <p>
+        <strong>Napier's Bones</strong> are a manually operated calculating device
+        created by John Napier of Merchiston, first published in 1617.
+      </p>
+      <p>
+        The device consists of a board with a rim and a set of numbered rods
+        (the "bones"). Each rod contains a single-digit multiplication table.
+        To multiply, you lay out the rods for each digit of the multiplicand
+        and read off the row that corresponds to your multiplier, adding the
+        diagonal columns to obtain the final product.
+      </p>
+      <p>
+        This application automates that process — enter any multiplicand and
+        multiplier to see the bones laid out and the step-by-step addition.
+      </p>
+    </div>
+  </div>
+  <div id="modal-overlay" class="modal-overlay hidden"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
