@@ -2,49 +2,94 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Naiper — Калькулятор</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>AX — Учёт расходов</title>
+    <meta name="description" content="AX — удобное приложение для ежедневного учёта расходов">
+    <meta name="theme-color" content="#0f0c29">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="calculator">
-        <header class="calculator__header">
-            <h1 class="calculator__title">Naiper</h1>
-            <p class="calculator__subtitle">Калькулятор</p>
+    <div class="app" id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header__left">
+                <h1 class="header__logo">AX</h1>
+            </div>
+            <div class="header__right">
+                <button class="header__btn" id="btnStats" title="Статистика">📊</button>
+            </div>
         </header>
 
-        <div class="calculator__display">
-            <div class="calculator__expression" id="expression"></div>
-            <div class="calculator__result" id="result">0</div>
+        <!-- Summary Card -->
+        <div class="summary" id="summary">
+            <div class="summary__period">
+                <button class="summary__period-btn active" data-period="day">День</button>
+                <button class="summary__period-btn" data-period="week">Неделя</button>
+                <button class="summary__period-btn" data-period="month">Месяц</button>
+            </div>
+            <div class="summary__total">
+                <span class="summary__label">Потрачено</span>
+                <span class="summary__amount" id="totalAmount">0 ₸</span>
+            </div>
+            <div class="summary__categories" id="categoryBreakdown"></div>
         </div>
 
-        <div class="calculator__buttons">
-            <button class="btn btn--function" data-action="clear">C</button>
-            <button class="btn btn--function" data-action="backspace">⌫</button>
-            <button class="btn btn--function" data-action="percent">%</button>
-            <button class="btn btn--operator" data-action="divide">÷</button>
+        <!-- Quick Add -->
+        <div class="add-expense" id="addExpense">
+            <div class="add-expense__row">
+                <input type="number" class="add-expense__amount" id="inputAmount"
+                       placeholder="0" inputmode="decimal" step="any" min="0">
+                <span class="add-expense__currency">₸</span>
+            </div>
+            <div class="add-expense__row">
+                <input type="text" class="add-expense__desc" id="inputDesc"
+                       placeholder="Описание (напр. кофе, такси, обед...)"
+                       autocomplete="off">
+            </div>
+            <div class="add-expense__category" id="autoCategory">
+                <span class="add-expense__category-icon" id="categoryIcon">📝</span>
+                <span class="add-expense__category-name" id="categoryName">Другое</span>
+            </div>
+            <button class="add-expense__submit" id="btnAdd">Добавить расход</button>
+        </div>
 
-            <button class="btn btn--number" data-action="7">7</button>
-            <button class="btn btn--number" data-action="8">8</button>
-            <button class="btn btn--number" data-action="9">9</button>
-            <button class="btn btn--operator" data-action="multiply">×</button>
+        <!-- Expense List -->
+        <div class="expenses" id="expenses">
+            <h2 class="expenses__title">История</h2>
+            <div class="expenses__list" id="expenseList">
+                <p class="expenses__empty" id="emptyMsg">Расходов пока нет. Добавьте первый!</p>
+            </div>
+        </div>
 
-            <button class="btn btn--number" data-action="4">4</button>
-            <button class="btn btn--number" data-action="5">5</button>
-            <button class="btn btn--number" data-action="6">6</button>
-            <button class="btn btn--operator" data-action="subtract">−</button>
+        <!-- Stats Modal -->
+        <div class="modal" id="statsModal">
+            <div class="modal__content">
+                <div class="modal__header">
+                    <h2 class="modal__title">Статистика</h2>
+                    <button class="modal__close" id="closeStats">✕</button>
+                </div>
+                <div class="modal__body" id="statsBody">
+                </div>
+            </div>
+        </div>
 
-            <button class="btn btn--number" data-action="1">1</button>
-            <button class="btn btn--number" data-action="2">2</button>
-            <button class="btn btn--number" data-action="3">3</button>
-            <button class="btn btn--operator" data-action="add">+</button>
-
-            <button class="btn btn--number btn--wide" data-action="0">0</button>
-            <button class="btn btn--number" data-action="decimal">.</button>
-            <button class="btn btn--equals" data-action="equals">=</button>
+        <!-- Delete Confirmation -->
+        <div class="modal modal--small" id="deleteModal">
+            <div class="modal__content">
+                <p class="modal__text">Удалить этот расход?</p>
+                <div class="modal__actions">
+                    <button class="modal__btn modal__btn--cancel" id="cancelDelete">Отмена</button>
+                    <button class="modal__btn modal__btn--danger" id="confirmDelete">Удалить</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script src="js/calculator.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
