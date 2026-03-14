@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naiper — Калькулятор</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="calculator">
+        <header class="calculator__header">
+            <h1 class="calculator__title">Naiper</h1>
+            <p class="calculator__subtitle">Калькулятор</p>
+        </header>
+
+        <div class="calculator__display">
+            <div class="calculator__expression" id="expression"></div>
+            <div class="calculator__result" id="result">0</div>
+        </div>
+
+        <div class="calculator__buttons">
+            <button class="btn btn--function" data-action="clear">C</button>
+            <button class="btn btn--function" data-action="backspace">⌫</button>
+            <button class="btn btn--function" data-action="percent">%</button>
+            <button class="btn btn--operator" data-action="divide">÷</button>
+
+            <button class="btn btn--number" data-action="7">7</button>
+            <button class="btn btn--number" data-action="8">8</button>
+            <button class="btn btn--number" data-action="9">9</button>
+            <button class="btn btn--operator" data-action="multiply">×</button>
+
+            <button class="btn btn--number" data-action="4">4</button>
+            <button class="btn btn--number" data-action="5">5</button>
+            <button class="btn btn--number" data-action="6">6</button>
+            <button class="btn btn--operator" data-action="subtract">−</button>
+
+            <button class="btn btn--number" data-action="1">1</button>
+            <button class="btn btn--number" data-action="2">2</button>
+            <button class="btn btn--number" data-action="3">3</button>
+            <button class="btn btn--operator" data-action="add">+</button>
+
+            <button class="btn btn--number btn--wide" data-action="0">0</button>
+            <button class="btn btn--number" data-action="decimal">.</button>
+            <button class="btn btn--equals" data-action="equals">=</button>
+        </div>
+    </div>
+
+    <script src="js/calculator.js"></script>
+</body>
+</html>
