@@ -19,7 +19,7 @@ const CATEGORIES = [
     keywords: ['магазин','shop','store','одежда','clothes','обувь','shoes','покупки','shopping','рынок','market','kaspi','каспи','aliexpress','wildberries','озон','ozon','lamoda','зара','zara','h&m','hm','nike','adidas','электроника','electronics','техника','phone','телефон','ноутбук','laptop']
   },
   {
-    key: 'health', icon: '��', name: 'Здоровье', color: '#22c55e',
+    key: 'health', icon: '🏥', name: 'Здоровье', color: '#22c55e',
     keywords: ['аптека','pharmacy','врач','doctor','больница','hospital','лекарства','medicine','лечение','treatment','зубной','dental','стоматолог','dentist','анализ','test','поликлиника','clinic','витамины','vitamins','спортзал','gym','фитнес','fitness']
   },
   {
@@ -168,53 +168,56 @@ function generateId() {
 
 // ─── DOM refs ─────────────────────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
-const addForm         = $('add-form');
-const amountInput     = $('amount-input');
-const descInput       = $('desc-input');
-const dateInput       = $('date-input');
-const timeInput       = $('time-input');
-const catChip         = $('cat-chip');
-const catChipIcon     = $('cat-chip-icon');
-const catChipName     = $('cat-chip-name');
-const currencySymbol  = $('currency-symbol');
-const headerMonthTotal= $('header-month-total');
-const headerDate      = $('header-date');
-const budgetSection   = $('budget-section');
-const budgetInfo      = $('budget-info');
-const budgetFill      = $('budget-fill');
-const cardTodayAmt    = $('card-today-amount');
-const cardTodayCnt    = $('card-today-count');
-const cardWeekAmt     = $('card-week-amount');
-const cardWeekCnt     = $('card-week-count');
-const cardMonthAmt    = $('card-month-amount');
-const cardMonthCnt    = $('card-month-count');
-const recentList      = $('recent-list');
-const recentEmpty     = $('recent-empty');
-const txListFull      = $('tx-list-full');
-const txEmpty         = $('tx-empty');
-const filterPeriod    = $('filter-period');
-const filterCategory  = $('filter-category');
-const catBars         = $('cat-bars');
-const catEmpty        = $('cat-empty');
-const lineChart       = $('line-chart');
-const toast           = $('toast');
-const settingsBtn     = $('settings-btn');
-const settingsModal   = $('settings-modal');
-const settingsClose   = $('settings-close');
-const currencySelect  = $('currency-select');
-const budgetInput     = $('budget-input');
-const saveSettingsBtn = $('save-settings-btn');
-const clearDataBtn    = $('clear-data-btn');
-const exportBtn       = $('export-btn');
-const editModal       = $('edit-modal');
-const editClose       = $('edit-close');
-const editAmount      = $('edit-amount');
-const editDesc        = $('edit-desc');
-const editCategory    = $('edit-category');
-const editDate        = $('edit-date');
-const saveEditBtn     = $('save-edit-btn');
-const deleteBtn       = $('delete-btn');
-const modalOverlay    = $('modal-overlay');
+const addForm          = $('add-form');
+const amountInput      = $('amount-input');
+const descInput        = $('desc-input');
+const dateInput        = $('date-input');
+const timeInput        = $('time-input');
+const catChip          = $('cat-chip');
+const catChipIcon      = $('cat-chip-icon');
+const catChipName      = $('cat-chip-name');
+const currencySymbol   = $('currency-symbol');
+const headerMonthTotal = $('header-month-total');
+const headerDate       = $('header-date');
+const budgetSection    = $('budget-section');
+const budgetInfo       = $('budget-info');
+const budgetFill       = $('budget-fill');
+const cardTodayAmt     = $('card-today-amount');
+const cardTodayCnt     = $('card-today-count');
+const cardWeekAmt      = $('card-week-amount');
+const cardWeekCnt      = $('card-week-count');
+const cardMonthAmt     = $('card-month-amount');
+const cardMonthCnt     = $('card-month-count');
+const recentList       = $('recent-list');
+const recentEmpty      = $('recent-empty');
+const txListFull       = $('tx-list-full');
+const txEmpty          = $('tx-empty');
+const filterPeriod     = $('filter-period');
+const filterCategory   = $('filter-category');
+const filterSearch     = $('filter-search');
+const quickRepeatSection = $('quick-repeat-section');
+const quickRepeatList  = $('quick-repeat-list');
+const catBars          = $('cat-bars');
+const catEmpty         = $('cat-empty');
+const lineChart        = $('line-chart');
+const toast            = $('toast');
+const settingsBtn      = $('settings-btn');
+const settingsModal    = $('settings-modal');
+const settingsClose    = $('settings-close');
+const currencySelect   = $('currency-select');
+const budgetInput      = $('budget-input');
+const saveSettingsBtn  = $('save-settings-btn');
+const clearDataBtn     = $('clear-data-btn');
+const exportBtn        = $('export-btn');
+const editModal        = $('edit-modal');
+const editClose        = $('edit-close');
+const editAmount       = $('edit-amount');
+const editDesc         = $('edit-desc');
+const editCategory     = $('edit-category');
+const editDate         = $('edit-date');
+const saveEditBtn      = $('save-edit-btn');
+const deleteBtn        = $('delete-btn');
+const modalOverlay     = $('modal-overlay');
 
 // ─── Toast ────────────────────────────────────────────────────────────────────
 let toastTimer;
@@ -409,8 +412,10 @@ function renderRecent() {
 function renderTxList() {
   const period   = filterPeriod.value;
   const catKey   = filterCategory.value;
+  const query    = filterSearch.value.trim().toLowerCase();
   let list = expenses.filter(e => isInPeriod(e, period));
   if (catKey !== 'all') list = list.filter(e => e.category === catKey);
+  if (query) list = list.filter(e => (e.description || '').toLowerCase().includes(query));
   list.sort((a, b) => {
     const cmp = b.date.localeCompare(a.date);
     return cmp !== 0 ? cmp : b.time.localeCompare(a.time);
@@ -430,6 +435,7 @@ function populateCategoryFilter() {
 
 filterPeriod.addEventListener('change', renderTxList);
 filterCategory.addEventListener('change', renderTxList);
+filterSearch.addEventListener('input', renderTxList);
 
 // ─── Stats tab ────────────────────────────────────────────────────────────────
 function renderStats() {
@@ -611,10 +617,48 @@ function renderCatBars() {
   });
 }
 
+// ─── Quick-repeat chips ────────────────────────────────────────────────────────
+// Shows the last N unique non-empty descriptions as tappable chips.
+const REPEAT_CHIPS_COUNT = 6;
+
+function renderQuickRepeat() {
+  quickRepeatList.innerHTML = '';
+  const seen = new Set();
+  const recent = [];
+  for (const e of expenses) {
+    const d = (e.description || '').trim();
+    if (d && !seen.has(d.toLowerCase())) {
+      seen.add(d.toLowerCase());
+      recent.push(e);
+      if (recent.length >= REPEAT_CHIPS_COUNT) break;
+    }
+  }
+  if (recent.length === 0) {
+    quickRepeatSection.classList.add('hidden');
+    return;
+  }
+  quickRepeatSection.classList.remove('hidden');
+  recent.forEach(e => {
+    const cat = CAT_MAP[e.category] || CAT_MAP.other;
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'repeat-chip';
+    chip.setAttribute('aria-label', `Повторить: ${e.description}`);
+    chip.innerHTML = `<span class="repeat-chip-icon">${cat.icon}</span><span class="repeat-chip-text">${e.description}</span>`;
+    chip.addEventListener('click', () => {
+      descInput.value = e.description;
+      updateCatChip(e.description);
+      amountInput.focus();
+    });
+    quickRepeatList.appendChild(chip);
+  });
+}
+
 // ─── Add expense ──────────────────────────────────────────────────────────────
 function refreshAll() {
   updateSummary();
   renderRecent();
+  renderQuickRepeat();
   // refresh active tab
   const activeTab = document.querySelector('.tab-btn.active')?.dataset.tab;
   if (activeTab === 'transactions') renderTxList();
@@ -792,3 +836,10 @@ refreshAll();
 
 // Keep header date up to date
 setInterval(updateHeaderDate, 60_000);
+
+// ─── Service Worker registration (PWA offline support) ────────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => { /* SW optional */ });
+  });
+}
