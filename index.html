@@ -15,79 +15,236 @@
 </head>
 <body>
     <div class="app" id="app">
-        <!-- Header -->
-        <header class="header">
-            <div class="header__left">
-                <h1 class="header__logo">AX</h1>
-            </div>
-            <div class="header__right">
-                <button class="header__btn" id="btnStats" title="Статистика">📊</button>
-            </div>
-        </header>
 
-        <!-- Summary Card -->
-        <div class="summary" id="summary">
-            <div class="summary__period">
-                <button class="summary__period-btn active" data-period="day">День</button>
-                <button class="summary__period-btn" data-period="week">Неделя</button>
-                <button class="summary__period-btn" data-period="month">Месяц</button>
-            </div>
-            <div class="summary__total">
-                <span class="summary__label">Потрачено</span>
-                <span class="summary__amount" id="totalAmount">0 ₸</span>
-            </div>
-            <div class="summary__categories" id="categoryBreakdown"></div>
-        </div>
-
-        <!-- Quick Add -->
-        <div class="add-expense" id="addExpense">
-            <div class="add-expense__row">
-                <input type="number" class="add-expense__amount" id="inputAmount"
-                       placeholder="0" inputmode="decimal" step="any" min="0">
-                <span class="add-expense__currency">₸</span>
-            </div>
-            <div class="add-expense__row">
-                <input type="text" class="add-expense__desc" id="inputDesc"
-                       placeholder="Описание (напр. кофе, такси, обед...)"
-                       autocomplete="off">
-            </div>
-            <div class="add-expense__category" id="autoCategory">
-                <span class="add-expense__category-icon" id="categoryIcon">📝</span>
-                <span class="add-expense__category-name" id="categoryName">Другое</span>
-            </div>
-            <button class="add-expense__submit" id="btnAdd">Добавить расход</button>
-        </div>
-
-        <!-- Expense List -->
-        <div class="expenses" id="expenses">
-            <h2 class="expenses__title">История</h2>
-            <div class="expenses__list" id="expenseList">
-                <p class="expenses__empty" id="emptyMsg">Расходов пока нет. Добавьте первый!</p>
-            </div>
-        </div>
-
-        <!-- Stats Modal -->
-        <div class="modal" id="statsModal">
-            <div class="modal__content">
-                <div class="modal__header">
-                    <h2 class="modal__title">Статистика</h2>
-                    <button class="modal__close" id="closeStats">✕</button>
+        <!-- ===== PAGE: HOME ===== -->
+        <div class="page page--home active" id="pageHome">
+            <header class="header">
+                <div class="header__left">
+                    <h1 class="header__logo">AX</h1>
+                    <span class="header__sub">учёт расходов</span>
                 </div>
-                <div class="modal__body" id="statsBody">
+            </header>
+
+            <!-- Summary Card -->
+            <div class="summary">
+                <div class="summary__period">
+                    <button class="summary__period-btn active" data-period="day">День</button>
+                    <button class="summary__period-btn" data-period="week">Неделя</button>
+                    <button class="summary__period-btn" data-period="month">Месяц</button>
+                </div>
+                <div class="summary__body">
+                    <div class="summary__ring-wrap" id="budgetRingWrap">
+                        <svg class="summary__ring" viewBox="0 0 120 120" aria-hidden="true">
+                            <defs>
+                                <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#ff8c00" />
+                                    <stop offset="100%" stop-color="#ffab40" />
+                                </linearGradient>
+                            </defs>
+                            <circle class="summary__ring-bg" cx="60" cy="60" r="52" />
+                            <circle class="summary__ring-fill" id="budgetRingFill" cx="60" cy="60" r="52" />
+                        </svg>
+                        <div class="summary__ring-inner">
+                            <span class="summary__amount" id="totalAmount">0 ₸</span>
+                            <span class="summary__budget-label" id="budgetLabel"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="summary__categories" id="categoryBreakdown"></div>
+            </div>
+
+            <!-- Expense List -->
+            <div class="expenses">
+                <div class="expenses__header">
+                    <h2 class="expenses__title">История</h2>
+                    <span class="expenses__count" id="expenseCount"></span>
+                </div>
+                <div class="expenses__list" id="expenseList">
+                    <div class="expenses__empty" id="emptyMsg">
+                        <div class="expenses__empty-icon">💰</div>
+                        <p class="expenses__empty-text">Расходов пока нет</p>
+                        <p class="expenses__empty-hint">Нажмите «+» чтобы добавить первый</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Delete Confirmation -->
-        <div class="modal modal--small" id="deleteModal">
-            <div class="modal__content">
-                <p class="modal__text">Удалить этот расход?</p>
-                <div class="modal__actions">
+        <!-- ===== PAGE: STATS ===== -->
+        <div class="page page--stats" id="pageStats">
+            <header class="header">
+                <h1 class="header__page-title">Статистика</h1>
+            </header>
+            <div class="stats" id="statsBody"></div>
+        </div>
+
+        <!-- ===== PAGE: SETTINGS ===== -->
+        <div class="page page--settings" id="pageSettings">
+            <header class="header">
+                <h1 class="header__page-title">Настройки</h1>
+            </header>
+            <div class="settings">
+                <div class="settings__group">
+                    <div class="settings__group-title">Бюджет</div>
+                    <label class="settings__row">
+                        <span class="settings__label">Месячный лимит</span>
+                        <div class="settings__input-wrap">
+                            <input type="number" class="settings__input" id="inputBudget"
+                                   placeholder="0" inputmode="decimal" min="0">
+                            <span class="settings__input-suffix" id="settingsCurrencyBudget">₸</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="settings__group">
+                    <div class="settings__group-title">Валюта</div>
+                    <label class="settings__row">
+                        <span class="settings__label">Символ валюты</span>
+                        <select class="settings__select" id="selectCurrency">
+                            <option value="₸">₸ — Тенге</option>
+                            <option value="₽">₽ — Рубль</option>
+                            <option value="$">$ — Доллар</option>
+                            <option value="€">€ — Евро</option>
+                            <option value="£">£ — Фунт</option>
+                            <option value="¥">¥ — Йена</option>
+                            <option value="₺">₺ — Лира</option>
+                            <option value="сом">сом — Сом</option>
+                            <option value="сўм">сўм — Сум</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="settings__group">
+                    <div class="settings__group-title">Данные</div>
+                    <button class="settings__btn" id="btnExport">
+                        <span class="settings__btn-icon">📥</span>
+                        Экспорт в CSV
+                    </button>
+                    <button class="settings__btn settings__btn--danger" id="btnClearData">
+                        <span class="settings__btn-icon">🗑️</span>
+                        Удалить все данные
+                    </button>
+                </div>
+                <div class="settings__group">
+                    <div class="settings__group-title">О приложении</div>
+                    <div class="settings__about">
+                        <div class="settings__about-logo">AX</div>
+                        <p class="settings__about-text">Учёт расходов v2.0</p>
+                        <p class="settings__about-text settings__about-text--muted">PWA · Оффлайн · Без рекламы</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== FAB (Floating Action Button) ===== -->
+        <button class="fab" id="fab" aria-label="Добавить расход">
+            <svg class="fab__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+
+        <!-- ===== BOTTOM NAV ===== -->
+        <nav class="nav" id="nav">
+            <button class="nav__btn active" data-page="home" aria-label="Расходы">
+                <svg class="nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span class="nav__label">Расходы</span>
+            </button>
+            <button class="nav__btn" data-page="stats" aria-label="Статистика">
+                <svg class="nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                <span class="nav__label">Статистика</span>
+            </button>
+            <button class="nav__btn" data-page="settings" aria-label="Настройки">
+                <svg class="nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span class="nav__label">Настройки</span>
+            </button>
+        </nav>
+
+        <!-- ===== ADD EXPENSE MODAL ===== -->
+        <div class="modal modal--slide" id="addModal">
+            <div class="modal__overlay" data-close="addModal"></div>
+            <div class="modal__sheet">
+                <div class="modal__handle"></div>
+                <h2 class="modal__sheet-title">Новый расход</h2>
+                <div class="add-expense">
+                    <div class="add-expense__row">
+                        <input type="number" class="add-expense__amount" id="inputAmount"
+                               placeholder="0" inputmode="decimal" step="any" min="0">
+                        <span class="add-expense__currency" id="addCurrency">₸</span>
+                    </div>
+                    <div class="add-expense__row">
+                        <input type="text" class="add-expense__desc" id="inputDesc"
+                               placeholder="Описание (напр. кофе, такси, обед...)"
+                               autocomplete="off">
+                    </div>
+                    <div class="add-expense__category" id="autoCategory">
+                        <span class="add-expense__category-icon" id="categoryIcon">📝</span>
+                        <span class="add-expense__category-name" id="categoryName">Другое</span>
+                    </div>
+                    <button class="add-expense__submit" id="btnAdd">
+                        <span>Добавить</span>
+                        <svg class="add-expense__submit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== EDIT EXPENSE MODAL ===== -->
+        <div class="modal modal--slide" id="editModal">
+            <div class="modal__overlay" data-close="editModal"></div>
+            <div class="modal__sheet">
+                <div class="modal__handle"></div>
+                <h2 class="modal__sheet-title">Редактировать</h2>
+                <div class="add-expense">
+                    <div class="add-expense__row">
+                        <input type="number" class="add-expense__amount" id="editAmount"
+                               placeholder="0" inputmode="decimal" step="any" min="0">
+                        <span class="add-expense__currency" id="editCurrency">₸</span>
+                    </div>
+                    <div class="add-expense__row">
+                        <input type="text" class="add-expense__desc" id="editDesc"
+                               placeholder="Описание" autocomplete="off">
+                    </div>
+                    <div class="add-expense__category" id="editAutoCategory">
+                        <span class="add-expense__category-icon" id="editCategoryIcon">📝</span>
+                        <span class="add-expense__category-name" id="editCategoryName">Другое</span>
+                    </div>
+                    <div class="edit-actions">
+                        <button class="edit-actions__btn edit-actions__btn--save" id="btnSaveEdit">
+                            <span>Сохранить</span>
+                        </button>
+                        <button class="edit-actions__btn edit-actions__btn--delete" id="btnDeleteFromEdit">
+                            <span>Удалить</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== DELETE CONFIRMATION ===== -->
+        <div class="modal modal--center" id="deleteModal">
+            <div class="modal__overlay" data-close="deleteModal"></div>
+            <div class="modal__dialog">
+                <div class="modal__dialog-icon">🗑️</div>
+                <p class="modal__dialog-text">Удалить этот расход?</p>
+                <p class="modal__dialog-sub">Это действие нельзя отменить</p>
+                <div class="modal__dialog-actions">
                     <button class="modal__btn modal__btn--cancel" id="cancelDelete">Отмена</button>
                     <button class="modal__btn modal__btn--danger" id="confirmDelete">Удалить</button>
                 </div>
             </div>
         </div>
+
+        <!-- ===== CLEAR DATA CONFIRMATION ===== -->
+        <div class="modal modal--center" id="clearModal">
+            <div class="modal__overlay" data-close="clearModal"></div>
+            <div class="modal__dialog">
+                <div class="modal__dialog-icon">⚠️</div>
+                <p class="modal__dialog-text">Удалить все данные?</p>
+                <p class="modal__dialog-sub">Все расходы будут безвозвратно удалены</p>
+                <div class="modal__dialog-actions">
+                    <button class="modal__btn modal__btn--cancel" id="cancelClear">Отмена</button>
+                    <button class="modal__btn modal__btn--danger" id="confirmClear">Удалить всё</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TOAST CONTAINER ===== -->
+        <div class="toast-container" id="toastContainer"></div>
     </div>
 
     <script src="js/app.js"></script>
